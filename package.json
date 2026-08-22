@@ -1,0 +1,16 @@
+{
+  "name": "home-math-trainer",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build -w packages/challenge-engine && npm run build -w apps/api && npm run build -w apps/web",
+    "test": "npm run test -w packages/challenge-engine && npm run test -w apps/api",
+    "dev:web": "npm run dev -w apps/web",
+    "dev:api": "npm run dev -w apps/api"
+  }
+}
