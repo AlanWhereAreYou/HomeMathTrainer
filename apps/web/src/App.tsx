@@ -45,6 +45,14 @@ const keypadRows = [
 ] as const
 
 const maxAnswerLength = 8
+const startRetries = 20
+const retryDelayMs = 500
+
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms)
+  })
+}
 
 function App() {
   const [sessionId, setSessionId] = useState('')
@@ -71,27 +79,39 @@ function App() {
     setFeedback(null)
     setAnswer('')
 
-    try {
-      const response = await fetch(`${API_BASE}/session/start`, {
-        method: 'POST',
-      })
+    for (let attempt = 1; attempt <= startRetries; attempt += 1) {
+      try {
+        if (attempt > 1) {
+          setStatusText(`Waiting for API... (${attempt}/${startRetries})`)
+        }
 
-      if (!response.ok) {
-        throw new Error('Unable to start session')
+        const response = await fetch(`${API_BASE}/session/start`, {
+          method: 'POST',
+        })
+
+        if (!response.ok) {
+          throw new Error('Unable to start session')
+        }
+
+        const payload = (await response.json()) as SessionStartResponse
+        setSessionId(payload.sessionId)
+        setQuestionId(payload.question.id)
+        setQuestionText(payload.question.expression)
+        setStreak(payload.streak)
+        setTargetStreak(payload.targetStreak)
+        setPassed(payload.passed)
+        setStatusText('Enter your answer and submit.')
+        setLoading(false)
+        return
+      } catch {
+        if (attempt === startRetries) {
+          setStatusText('Could not start the challenge. Try again.')
+          setLoading(false)
+          return
+        }
+
+        await delay(retryDelayMs)
       }
-
-      const payload = (await response.json()) as SessionStartResponse
-      setSessionId(payload.sessionId)
-      setQuestionId(payload.question.id)
-      setQuestionText(payload.question.expression)
-      setStreak(payload.streak)
-      setTargetStreak(payload.targetStreak)
-      setPassed(payload.passed)
-      setStatusText('Enter your answer and submit.')
-    } catch {
-      setStatusText('Could not start the challenge. Try again.')
-    } finally {
-      setLoading(false)
     }
   }
 
@@ -311,6 +331,12 @@ function App() {
         )}
 
         <p className="statusText">{statusText}</p>
+
+        {!sessionId && !loading && (
+          <button type="button" className="ghost" onClick={() => void startSession()}>
+            Retry Connection
+          </button>
+        )}
 
         {passed && (
           <button type="button" className="restart" onClick={() => void startSession()}>
