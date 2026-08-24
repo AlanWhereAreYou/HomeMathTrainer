@@ -47,6 +47,12 @@ docker compose build
 docker compose up -d
 ```
 
+If you want OMV to pull prebuilt images from GitHub Container Registry instead of building locally, use:
+
+```bash
+docker compose -f docker-compose.registry.yml up -d
+```
+
 Default external port is `8080` and can be overridden:
 
 ```bash
@@ -67,3 +73,4 @@ Then browse on LAN:
 
 - Session state is in-memory (per running API container) for v1.
 - No user accounts or persistence in this version.
+- Container images are built and pushed automatically on `main` by [.github/workflows/docker-ghcr.yml](.github/workflows/docker-ghcr.yml).
