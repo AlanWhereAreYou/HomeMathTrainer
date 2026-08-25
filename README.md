@@ -16,7 +16,7 @@ Container-ready web app for LAN hosting (OMV-friendly) with a math challenge gam
 ## Project Structure
 
 - `apps/web`: React + TypeScript + Vite frontend.
-- `apps/api`: Fastify API with per-session streak state.
+- `apps/api`: Fastify API with per-session streak state and production static file serving.
 - `packages/challenge-engine`: shared challenge generation and answer parsing logic.
 
 ## Local Run
@@ -43,17 +43,12 @@ npm test
 Use compose from repository root:
 
 ```bash
-docker compose build
 docker compose up -d
 ```
 
-If you want OMV to pull prebuilt images from GitHub Container Registry instead of building locally, use:
+The top-level [docker-compose.yml](docker-compose.yml) now runs a single container image that serves both the API and the webpage.
 
-```bash
-docker compose -f docker-compose.registry.yml up -d
-```
-
-Default external port is `8080` and can be overridden:
+Default external port is `8100` and can be overridden:
 
 ```bash
 HOST_PORT=8181 docker compose up -d
@@ -61,7 +56,7 @@ HOST_PORT=8181 docker compose up -d
 
 Then browse on LAN:
 
-- `http://<omv-lan-ip>:8080` (or your configured host port)
+- `http://<omv-lan-ip>:8100` (or your configured host port)
 
 ## API Endpoints
 

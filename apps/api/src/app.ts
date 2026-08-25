@@ -1,5 +1,8 @@
+import { existsSync, readFileSync } from 'node:fs'
 import { randomUUID } from 'node:crypto'
+import path from 'node:path'
 import Fastify from 'fastify'
+import fastifyStatic from '@fastify/static'
 import {
   defaultChallengeConfig,
   generateQuestion,
@@ -97,6 +100,8 @@ function sessionMissingResponse(questionId: string, submittedAnswer: string): An
 
 export function buildApp() {
   const app = Fastify({ logger: false })
+  const frontendRoot = path.join(process.cwd(), 'apps', 'web', 'dist')
+  const indexHtmlPath = path.join(frontendRoot, 'index.html')
 
   app.get('/health', async () => ({ ok: true }))
 
@@ -196,6 +201,22 @@ export function buildApp() {
       return response
     },
   )
+
+  if (existsSync(indexHtmlPath)) {
+    app.register(fastifyStatic, {
+      root: frontendRoot,
+      prefix: '/',
+      decorateReply: false,
+    })
+
+    app.setNotFoundHandler((request, reply) => {
+      if (request.url.startsWith('/api') || request.url === '/health') {
+        return reply.code(404).send({ error: 'Not Found' })
+      }
+
+      return reply.type('text/html; charset=utf-8').send(readFileSync(indexHtmlPath, 'utf8'))
+    })
+  }
 
   return app
 }

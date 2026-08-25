@@ -16,7 +16,7 @@ jobs:
 
     env:
       REGISTRY: ghcr.io
-      IMAGE_PREFIX: ghcr.io/alanwhereareyou/home-math-trainer
+      IMAGE_NAME: ghcr.io/alanwhereareyou/home-math-trainer
 
     steps:
       - name: Checkout
@@ -32,38 +32,20 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract metadata for API image
-        id: meta_api
+      - name: Extract metadata for app image
+        id: meta_app
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.IMAGE_PREFIX }}-api
+          images: ${{ env.IMAGE_NAME }}
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
             type=sha
 
-      - name: Build and push API image
+      - name: Build and push app image
         uses: docker/build-push-action@v6
         with:
           context: .
           file: ./apps/api/Dockerfile
           push: true
-          tags: ${{ steps.meta_api.outputs.tags }}
-          labels: ${{ steps.meta_api.outputs.labels }}
-
-      - name: Extract metadata for Web image
-        id: meta_web
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.IMAGE_PREFIX }}-web
-          tags: |
-            type=raw,value=latest,enable={{is_default_branch}}
-            type=sha
-
-      - name: Build and push Web image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: ./apps/web/Dockerfile
-          push: true
-          tags: ${{ steps.meta_web.outputs.tags }}
-          labels: ${{ steps.meta_web.outputs.labels }}
+          tags: ${{ steps.meta_app.outputs.tags }}
+          labels: ${{ steps.meta_app.outputs.labels }}
