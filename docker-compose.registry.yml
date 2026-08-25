@@ -3,9 +3,12 @@ services:
     image: ghcr.io/alanwhereareyou/home-math-trainer-api:latest
     container_name: homemath-api
     environment:
+      # API listens inside the container on port 3000.
       - PORT=3000
+      # Bind to all container interfaces so the web container can reach it.
       - HOST=0.0.0.0
     expose:
+      # Internal container port only; not published on the host.
       - "3000"
     restart: unless-stopped
     healthcheck:
@@ -21,7 +24,8 @@ services:
       api:
         condition: service_healthy
     ports:
-      - "${HOST_PORT:-8080}:80"
+      # Host port 8100 maps to container port 80.
+      - 8100:80
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost/"]
