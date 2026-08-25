@@ -7,6 +7,9 @@ RUN npm install --include=optional
 # Work around npm optional dependency resolution bug by installing the exact Linux rolldown binding explicitly.
 RUN ROLLDOWN_VERSION=$(node -p "require('./apps/web/node_modules/rolldown/package.json').version") \
 	&& npm install --no-save "@rolldown/binding-linux-x64-gnu@${ROLLDOWN_VERSION}"
+# Work around the same optional dependency bug for vite css minification native binding.
+RUN LIGHTNINGCSS_VERSION=$(node -p "require('./apps/web/node_modules/lightningcss/package.json').version") \
+	&& npm install --no-save "lightningcss-linux-x64-gnu@${LIGHTNINGCSS_VERSION}"
 RUN npm run build
 
 FROM node:24-slim
