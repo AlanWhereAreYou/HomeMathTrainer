@@ -321,7 +321,7 @@ function App() {
           <section className={`feedback ${feedback.isCorrect ? 'ok' : 'bad'}`}>
             <div className="feedbackTop">
               <strong>{feedback.isCorrect ? '✓ Correct' : '✗ Incorrect'}</strong>
-              <span>Correct answer: {feedback.correctAnswer}</span>
+              {feedback.isCorrect && <span>Correct answer: {feedback.correctAnswer}</span>}
             </div>
             <div className="feedbackBottom">
               <span>Your answer: {feedback.submittedAnswer || '(empty)'}</span>
