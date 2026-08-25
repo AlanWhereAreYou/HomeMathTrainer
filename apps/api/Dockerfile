@@ -2,7 +2,8 @@ FROM node:24-slim AS build
 WORKDIR /app
 
 COPY . .
-RUN npm ci
+# Use npm install with optional deps so Linux-native rolldown bindings are present in CI.
+RUN npm install --include=optional
 RUN npm run build
 
 FROM node:24-slim
