@@ -1,11 +1,11 @@
-FROM node:24-alpine AS build
+FROM node:24-slim AS build
 WORKDIR /app
 
 COPY . .
 RUN npm ci
 RUN npm run build
 
-FROM node:24-alpine
+FROM node:24-slim
 WORKDIR /app
 COPY --from=build /app/apps/api/package.json ./apps/api/package.json
 COPY --from=build /app/apps/api/dist ./apps/api/dist

@@ -1,0 +1,8 @@
+node_modules/
+**/node_modules/
+.git/
+.vscode/
+apps/web/dist/
+apps/api/dist/
+packages/challenge-engine/dist/
+*.log
