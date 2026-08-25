@@ -46,6 +46,13 @@ Use compose from repository root:
 docker compose up -d
 ```
 
+Update to the latest pushed image:
+
+```bash
+docker compose pull
+docker compose up -d
+```
+
 The top-level [docker-compose.yml](docker-compose.yml) now runs a single container image that serves both the API and the webpage.
 
 Default external port is `8100` and can be overridden:

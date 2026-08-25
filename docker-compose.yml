@@ -2,11 +2,16 @@ services:
   app:
     image: ghcr.io/alanwhereareyou/home-math-trainer:latest
     container_name: homemath-app
+    # Run container process as UID:GID (adjust if your OMV user IDs differ).
+    user: "1000:1000"
     environment:
+      # Internal app port Fastify listens on inside the container.
       - PORT=3000
+      # Bind on all container interfaces so Docker port publishing can reach it.
       - HOST=0.0.0.0
     ports:
-      - "${HOST_PORT:-8100}:3000"
+      # Host port 8100 forwards to container port 3000.
+      - "8100:3000"
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:3000/health"]
