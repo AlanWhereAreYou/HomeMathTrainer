@@ -20,7 +20,7 @@ async function mockStartSession(page: import('@playwright/test').Page): Promise<
       body: JSON.stringify({
         sessionId: 'e2e-session',
         streak: 0,
-        targetStreak: 20,
+        targetStreak: 15,
         passed: false,
         question: {
           id: 'q-1',

@@ -59,7 +59,7 @@ function App() {
   const [questionId, setQuestionId] = useState('')
   const [questionText, setQuestionText] = useState('')
   const [streak, setStreak] = useState(0)
-  const [targetStreak, setTargetStreak] = useState(20)
+  const [targetStreak, setTargetStreak] = useState(15)
   const [passed, setPassed] = useState(false)
   const [answer, setAnswer] = useState('')
   const [feedback, setFeedback] = useState<Feedback | null>(null)
@@ -207,7 +207,7 @@ function App() {
       setAnswer('')
       setStatusText(
         payload.passed
-          ? 'Challenge complete. You reached 20 in a row.'
+          ? 'Challenge complete. You reached 15 in a row.'
           : payload.isCorrect
             ? 'Correct. Keep going.'
             : 'Incorrect. Streak reset to 0.',
@@ -266,7 +266,7 @@ function App() {
       <section className="card" aria-live="polite">
         <header className="header">
           <h1>Home Math Trainer</h1>
-          <p>20 correct in a row. Any mistake resets you to zero.</p>
+          <p>15 correct in a row. Any mistake resets you to zero.</p>
         </header>
 
         <div className="progressBlock">

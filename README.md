@@ -10,7 +10,7 @@ Container-ready web app for LAN hosting (OMV-friendly) with a math challenge gam
 - Submit feedback shows:
   - correct answer
   - check or X state
-- Pass rule: 20 correct in a row.
+- Pass rule: 15 correct in a row.
 - Any mistake resets streak to 0.
 
 ## Project Structure

@@ -16,7 +16,7 @@ interface Session {
   passed: boolean
   currentQuestion: ReturnType<typeof generateQuestion>
   recentFingerprints: string[]
-  lastResultByQuestionId: Map<string, AnswerResponse>
+  lastResultBySubmission: Map<string, AnswerResponse>
 }
 
 interface StartResponse {
@@ -52,7 +52,7 @@ interface AnswerResponse {
 }
 
 const sessions = new Map<string, Session>()
-const targetStreak = 20
+const targetStreak = 15
 
 function appendFingerprint(
   history: string[],
@@ -79,8 +79,12 @@ function createSession(): Session {
     passed: false,
     currentQuestion: firstQuestion,
     recentFingerprints: [firstQuestion.fingerprint],
-    lastResultByQuestionId: new Map(),
+    lastResultBySubmission: new Map(),
   }
+}
+
+function buildSubmissionKey(questionId: string, userAnswer: string): string {
+  return `${questionId}::${userAnswer}`
 }
 
 function sessionMissingResponse(questionId: string, submittedAnswer: string): AnswerResponse {
@@ -132,7 +136,11 @@ export function buildApp() {
           .send(sessionMissingResponse(request.body.questionId, request.body.userAnswer))
       }
 
-      const cached = session.lastResultByQuestionId.get(request.body.questionId)
+      const submissionKey = buildSubmissionKey(
+        request.body.questionId,
+        request.body.userAnswer,
+      )
+      const cached = session.lastResultBySubmission.get(submissionKey)
       if (cached) {
         return cached
       }
@@ -166,10 +174,9 @@ export function buildApp() {
       session.streak = newStreak
       session.passed = passed
 
-      const currentQuestionId = session.currentQuestion.id
       let nextQuestion: { id: string; expression: string } | null = null
 
-      if (!passed) {
+      if (!passed && isCorrect) {
         const generated = pickQuestion(session.recentFingerprints)
         session.recentFingerprints = appendFingerprint(
           session.recentFingerprints,
@@ -179,6 +186,12 @@ export function buildApp() {
         nextQuestion = {
           id: generated.id,
           expression: generated.expression,
+        }
+      } else if (!passed) {
+        // Retry the same question after an incorrect attempt.
+        nextQuestion = {
+          id: gradedQuestion.id,
+          expression: gradedQuestion.expression,
         }
       }
 
@@ -196,7 +209,7 @@ export function buildApp() {
       }
 
       // Persist exact response for idempotent duplicate submissions.
-      session.lastResultByQuestionId.set(currentQuestionId, response)
+      session.lastResultBySubmission.set(submissionKey, response)
 
       return response
     },
