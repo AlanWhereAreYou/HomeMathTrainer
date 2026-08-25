@@ -14,34 +14,39 @@
 }
 
 .page {
-  min-height: 100vh;
-  padding: 20px 12px;
+  min-height: 100dvh;
+  padding: clamp(8px, 1.8dvh, 20px) 12px;
   display: grid;
   place-items: center;
+  overflow: hidden;
 }
 
 .card {
   width: min(980px, 100%);
+  height: min(980px, calc(100dvh - clamp(16px, 3.6dvh, 40px)));
+  max-height: calc(100dvh - clamp(16px, 3.6dvh, 40px));
   background: var(--card);
   border: 1px solid #ffffff;
   box-shadow: var(--shadow);
   border-radius: 24px;
-  padding: 20px;
+  padding: clamp(10px, 2dvh, 20px);
   display: grid;
-  gap: 16px;
+  align-content: start;
+  gap: clamp(8px, 1.2dvh, 16px);
   backdrop-filter: blur(4px);
+  overflow: hidden;
 }
 
 .header h1 {
   margin: 0;
-  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-size: clamp(1.6rem, min(4vw, 4dvh), 3rem);
   line-height: 1.05;
 }
 
 .header p {
   margin: 8px 0 0;
   color: var(--muted);
-  font-size: clamp(1rem, 2vw, 1.3rem);
+  font-size: clamp(0.9rem, min(2vw, 2.1dvh), 1.2rem);
 }
 
 .progressBlock {
@@ -54,11 +59,11 @@
   justify-content: space-between;
   align-items: center;
   color: var(--muted);
-  font-size: clamp(1rem, 2vw, 1.25rem);
+  font-size: clamp(0.9rem, min(2vw, 2dvh), 1.15rem);
 }
 
 .progressTrack {
-  height: 16px;
+  height: clamp(10px, 1.6dvh, 16px);
   background: #dce8e5;
   border-radius: 999px;
   overflow: hidden;
@@ -73,34 +78,34 @@
 .questionBox {
   border: 1px solid var(--line);
   border-radius: 16px;
-  padding: 16px;
+  padding: clamp(10px, 1.5dvh, 16px);
   background: #fff;
 }
 
 .questionBox h2 {
   margin: 0;
-  font-size: clamp(1.05rem, 2vw, 1.35rem);
+  font-size: clamp(0.95rem, min(1.8vw, 1.9dvh), 1.2rem);
   color: var(--muted);
 }
 
 .expression {
-  margin-top: 12px;
-  font-size: clamp(2.1rem, 7vw, 4.2rem);
+  margin-top: clamp(6px, 1dvh, 12px);
+  font-size: clamp(1.6rem, min(5.2vw, 5dvh), 3.6rem);
   font-weight: 800;
   letter-spacing: 0.01em;
   line-height: 1.1;
 }
 
 .answerDisplay {
-  min-height: 84px;
+  min-height: clamp(44px, 7.2dvh, 84px);
   border-radius: 16px;
   border: 2px solid #cfd9ef;
   background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  padding: 0 18px;
-  font-size: clamp(1.9rem, 6vw, 3.2rem);
+  padding: 0 clamp(10px, 1.6dvh, 18px);
+  font-size: clamp(1.4rem, min(4.8vw, 4.2dvh), 2.8rem);
   font-weight: 800;
 }
 
@@ -115,7 +120,7 @@
 .key {
   border: 0;
   border-radius: 16px;
-  font-size: clamp(1.15rem, 2.6vw, 1.45rem);
+  font-size: clamp(1rem, min(2.2vw, 2.2dvh), 1.35rem);
   font-weight: 800;
   cursor: pointer;
 }
@@ -123,28 +128,29 @@
 .ghost {
   background: #eceff5;
   color: #2f3953;
-  min-height: 64px;
+  min-height: clamp(40px, 5.4dvh, 64px);
 }
 
 .primary {
   background: var(--primary);
   color: var(--primary-ink);
-  min-height: 64px;
+  min-height: clamp(40px, 5.4dvh, 64px);
 }
 
 .keypad {
   display: grid;
-  gap: 10px;
+  align-content: center;
+  gap: clamp(6px, 1dvh, 10px);
 }
 
 .keypadRow {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  gap: clamp(6px, 1dvh, 10px);
 }
 
 .key {
-  min-height: 82px;
+  min-height: clamp(36px, 6.8dvh, 82px);
   background: #ffffff;
   border: 1px solid #d4dced;
 }
@@ -155,10 +161,10 @@
 
 .feedback {
   border-radius: 16px;
-  padding: 14px;
+  padding: clamp(8px, 1.2dvh, 14px);
   display: grid;
   gap: 6px;
-  font-size: clamp(1rem, 2.1vw, 1.2rem);
+  font-size: clamp(0.9rem, min(1.8vw, 1.9dvh), 1.1rem);
 }
 
 .feedback.ok {
@@ -182,11 +188,11 @@
 .statusText {
   margin: 0;
   color: var(--muted);
-  font-size: clamp(1rem, 2vw, 1.25rem);
+  font-size: clamp(0.9rem, min(1.7vw, 1.8dvh), 1.1rem);
 }
 
 .restart {
-  min-height: 64px;
+  min-height: clamp(40px, 5.4dvh, 64px);
   background: #2f1f55;
   color: #fff;
 }
@@ -198,35 +204,150 @@ button:disabled {
 
 @media (max-width: 768px) {
   .page {
-    padding: 12px 8px;
+    padding: 6px;
   }
 
   .card {
     border-radius: 18px;
-    padding: 14px;
-    gap: 12px;
+    height: calc(100dvh - 12px);
+    max-height: calc(100dvh - 12px);
+    padding: 8px;
+    gap: 6px;
+  }
+
+  .header h1 {
+    font-size: clamp(1.2rem, 4.8vw, 2rem);
+  }
+
+  .header p {
+    margin-top: 4px;
+    font-size: clamp(0.75rem, 2.6vw, 0.95rem);
+  }
+
+  .progressBlock {
+    gap: 6px;
+  }
+
+  .progressTrack {
+    height: 8px;
+  }
+
+  .questionBox {
+    padding: 8px 10px;
+  }
+
+  .questionBox h2 {
+    font-size: clamp(0.8rem, 2.8vw, 1rem);
   }
 
   .expression {
-    font-size: clamp(2rem, 10vw, 3rem);
+    margin-top: 4px;
+    font-size: clamp(1.7rem, 8.2vw, 2.5rem);
+    line-height: 1;
   }
 
   .answerDisplay {
-    min-height: 76px;
+    min-height: clamp(36px, 6.2dvh, 52px);
+    border-radius: 12px;
+    font-size: clamp(1.1rem, 5.8vw, 1.9rem);
   }
 
   .actionsRow {
-    grid-template-columns: 1fr;
+    gap: 8px;
   }
 
   .ghost,
   .primary,
   .restart {
-    min-height: 62px;
+    min-height: clamp(34px, 5.4dvh, 48px);
+    border-radius: 12px;
+    font-size: clamp(0.95rem, 3.4vw, 1.05rem);
+  }
+
+  .keypad {
+    gap: 6px;
+  }
+
+  .keypadRow {
+    gap: 6px;
   }
 
   .key {
-    min-height: 74px;
+    min-height: clamp(34px, 6.8dvh, 56px);
+    border-radius: 12px;
+    font-size: clamp(1rem, 4.2vw, 1.2rem);
+  }
+
+  .feedback {
+    padding: 8px 10px;
+    gap: 4px;
+    font-size: clamp(0.75rem, 2.7vw, 0.95rem);
+  }
+
+  .statusText {
+    font-size: clamp(0.75rem, 2.7vw, 0.95rem);
+  }
+}
+
+@media (max-width: 1024px) and (max-height: 820px) {
+  .page {
+    padding: 4px;
+  }
+
+  .card {
+    height: calc(100dvh - 8px);
+    max-height: calc(100dvh - 8px);
+    padding: 6px;
+    gap: 5px;
+    border-radius: 14px;
+  }
+
+  .header p {
+    display: none;
+  }
+
+  .progressLabel {
+    font-size: 0.9rem;
+  }
+
+  .questionBox {
+    padding: 6px 8px;
+  }
+
+  .expression {
+    margin-top: 2px;
+    font-size: clamp(1.4rem, 6.8vw, 2rem);
+  }
+
+  .answerDisplay {
+    min-height: 34px;
+    padding-inline: 10px;
+  }
+
+  .actionsRow {
+    gap: 6px;
+  }
+
+  .ghost,
+  .primary,
+  .restart {
+    min-height: 32px;
+  }
+
+  .keypad {
+    gap: 4px;
+  }
+
+  .keypadRow {
+    gap: 4px;
+  }
+
+  .key {
+    min-height: clamp(30px, 6dvh, 46px);
+  }
+
+  .feedback {
+    padding: 6px 8px;
   }
 }
 
